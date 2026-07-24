@@ -1,0 +1,28 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --allow-read --allow-net --allow-env main.ts",
+    "test": "deno test --ignore=web --allow-read --allow-net --allow-env",
+    "compile": "myfish compile",
+    "start": "deno run -A src/server.ts",
+    "web": "cd web && pnpm build",
+    "build": "deno task web"
+  },
+  "imports": {
+    "@antchain/myassembly": "npm:@antchain/myassembly@^1.2.0",
+    "@antchain/mychain": "npm:@antchain/mychain@^0.4.2",
+    "src/": "./src/",
+    "@std/assert": "jsr:@std/assert@1",
+    "std/": "https://deno.land/std@0.220.0/",
+    "uuid": "npm:uuid@9.0.1"
+  },
+  "compilerOptions": {
+    "strict": true
+  },
+  "lint": {
+    "include": ["*.ts"]
+  },
+  "fmt": {
+    "include": ["*.ts"]
+  },
+  "nodeModulesDir": "auto"
+}

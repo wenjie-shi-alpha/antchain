@@ -1,0 +1,15 @@
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "deno.enablePaths": [
+    "src/",
+    "test/",
+    "task/",
+  ],
+  "deno.lint": true,
+  "deno.importMap": "./deno.json",
+  // 文件自动保存设置
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000
+}

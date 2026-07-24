@@ -1,0 +1,166 @@
+{
+  "dynamicParameter": "",
+  "operatorList": [
+    {
+      "code": "dataset_reader",
+      "id": "1af6c6a3-f40f-4c99-8d36-3f995e6ce816",
+      "meta": {
+        "analyzeRule": {
+          "analyzerType": "PDS_DATASET_READER"
+        },
+        "checkRules": [],
+        "moduleMapRule": {
+          "mapRuleType": "ONLY_ONE",
+          "mapParams": {
+            "openEngineModuleName": "open_engine_mod_v2",
+            "roleMap": {
+              "worker": "role1"
+            }
+          }
+        }
+      },
+      "dynamicParameter": {
+        "custom_params": {
+          "dataSetInternalID": "1",
+          "id": "0352d09d-db26-4729-b207-2dcdf6c9a75b",
+          "version": "00.00.001"
+        },
+        "co_dataset_id": "CO_DATASET_20250323164852_moyjsDA0",
+        "requested_field_list": [
+          "value_0"
+        ]
+      }
+    },
+    {
+      "code": "dataset_reader",
+      "id": "475f757e-beae-4b70-9e78-892bf5f59855",
+      "meta": {
+        "analyzeRule": {
+          "analyzerType": "PDS_DATASET_READER"
+        },
+        "checkRules": [],
+        "moduleMapRule": {
+          "mapRuleType": "ONLY_ONE",
+          "mapParams": {
+            "openEngineModuleName": "open_engine_mod_v2",
+            "roleMap": {
+              "worker": "role1"
+            }
+          }
+        }
+      },
+      "dynamicParameter": {
+        "custom_params": {
+          "dataSetInternalID": "0",
+          "id": "04650d44-4eb5-4d29-b70c-ce86bfdff684",
+          "version": "00.00.001"
+        },
+        "co_dataset_id": "CO_DATASET_20250323164711_44Uq3G97",
+        "requested_field_list": [
+          "value_0"
+        ]
+      }
+    },
+    {
+      "code": "data_writer",
+      "id": "c9706900-23d8-48a9-b1c3-30d70f7d9db1",
+      "meta": {
+        "analyzeRule": {
+          "analyzerType": "PDS_DATA_WRITER",
+          "params": {
+            "isCipherText": false
+          }
+        },
+        "checkRules": [],
+        "moduleMapRule": {
+          "mapRuleType": "ONLY_ONE",
+          "mapParams": {
+            "openEngineModuleName": "open_engine_mod_v2",
+            "roleMap": {
+              "worker": "role1"
+            }
+          }
+        }
+      },
+      "dynamicParameter": {
+        "storage_type": "true",
+        "owner_did": "did:private:0000:698d9f20776b90eb5c1dac2f27074fcb55dee103426e6822d634127bc539ee7d",
+        "format_type": "CSV",
+        "name": "result",
+        "is_manage": true
+      }
+    },
+    {
+      "code": "scql",
+      "id": "550a900b-58ea-4bb9-a976-cedd1c54b88e",
+      "meta": {
+        "analyzeRule": {
+          "analyzerType": "SQL",
+          "params": {
+            "receiverRoleName": "receiver"
+          }
+        },
+        "enablePreConfig": true,
+        "preset": "preset-shape-double-knife",
+        "checkRules": [
+          {
+            "parameterPaths": [
+              "$.dp_{workerIndex}__ccl.column_ccl.keySet()"
+            ],
+            "constraintRule": "EXIST_IN_DATASET_FIELD",
+            "ports": [
+              "dp_input_file"
+            ]
+          },
+          {
+            "constraintRule": "WORKER_NOT_SAME",
+            "params": {
+              "roleList": [
+                "dp"
+              ]
+            }
+          },
+          {
+            "parameterPaths": [
+              "$.dp_0__table_name",
+              "$.dp_1__table_name"
+            ],
+            "params": "^[A-Za-z0-9_$]*$",
+            "constraintRule": "REG_EX",
+            "ports": [
+              "dp_input_file"
+            ]
+          }
+        ],
+        "moduleMapRule": {
+          "mapRuleType": "WORKER_NUM",
+          "role": "dp",
+          "mapParams": {
+            "1": {
+              "module": "scql_single_dp"
+            }
+          }
+        }
+      },
+      "dynamicParameter": {
+        "dp_0__ccl": {
+          "column_ccl": {
+            "value_0": "ALL_DISCLOSURE"
+          }
+        },
+        "result_table_create_cmd": "CREATE table result_table (average_value double)",
+        "query_cmd": "SELECT AVG(combined_values) AS average_value FROM ( SELECT value_0 AS combined_values FROM t1 UNION ALL SELECT value_0 AS combined_values FROM t2 ) AS combined_data",
+        "dp_1__ccl": {
+          "column_ccl": {
+            "value_0": "ALL_DISCLOSURE"
+          }
+        },
+        "dp_0__table_name": "t1",
+        "dp_1__table_name": "t2",
+        "_worker": {
+          "receiver": "did:private:0000:698d9f20776b90eb5c1dac2f27074fcb55dee103426e6822d634127bc539ee7d"
+        }
+      }
+    }
+  ]
+}
